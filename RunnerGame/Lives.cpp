@@ -1,18 +1,21 @@
 #include "Lives.h"
 #include "Audio.h"
 #include "CreditWindow.h"
+#include "CloseWindow.h"
 
-bool Lives::DrawLives(sf::RenderWindow& window)
+void Lives::DrawLives(sf::RenderWindow& window)
 {
 	if (lives == 0)
 	{
-		return false;
+		
+		CloseWindow cr(window.getSize().x, window.getSize().y);
+		window.close();
+		cr.setup();
 	}
 	for (int i = 1; i <= lives; i++)
 	{
 		window.draw(hearts[i - 1]);
 	}
-	return true;
 }
 void Lives::UpdateLives(Player& player)
 {

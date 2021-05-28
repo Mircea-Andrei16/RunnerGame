@@ -1,16 +1,33 @@
 #include "Game.h"
 #include "CloseWindow.h"
 
-void Game::ConfigureGame(sf::RenderWindow &window)
+void Game::ConfigureGame(sf::RenderWindow &window,int val)
 {
     sf::Texture playerTexture;
 
     Lives* lives = new Lives();
 
+    sf::FloatRect   fBounds(-0.f, -0.f, 5500.f, 5000.f);
+    sf::Texture     Texture;
+
+    Texture.loadFromFile("photos\\4.png");
+    sf::IntRect        iBounds(fBounds);
+    Texture.setRepeated(true);
+    sf::Sprite         Sprite(Texture, iBounds);
+
+    const sf::Vector2f viewStart(fBounds.left + (fBounds.width / 2), fBounds.top + (fBounds.height / 2));
+    const sf::Vector2f spriteStart(fBounds.left-10, fBounds.top+380);
+
+
+    sf::Text text;
+    text.setFillColor(sf::Color::Red);
+    text.setString("You died!");
+
     srand(time(NULL));
 
     playerTexture.loadFromFile("photos\\runner.png");
     Player player(&playerTexture, sf::Vector2u(5, 2), 0.3f, 100.0f, 200.0f, lives);
+
 
     float deltaTime = 0.0f;
 
@@ -25,12 +42,13 @@ void Game::ConfigureGame(sf::RenderWindow &window)
 
     Audio playEffectSound;
 
-    playEffectSound.playFundalSong();
+   // playEffectSound.playFundalSong();
 
     int counterSounds = 0;
 
     Score score;
 
+    
     while (window.isOpen())
     {
        deltaTime = clock.getElapsedTime().asSeconds();
@@ -40,8 +58,11 @@ void Game::ConfigureGame(sf::RenderWindow &window)
             deltaTime = 1.f / 20.f;
         }
         
-        Platform platform(nullptr, sf::Vector2f(1200.f, 250.f), sf::Vector2f(player.GetPosition().x, 500.f));
+        Platform platform(nullptr, sf::Vector2f(1200.f, 250.f), sf::Vector2f(player.GetPosition().x, 500.f), val);
+        Platform platform1(nullptr, sf::Vector2f(50.f, 20.f), sf::Vector2f(500.f, 200.f), val);
+        Platform platform2(nullptr, sf::Vector2f(50.f, 20.f), sf::Vector2f(1200.f, 280.f), val);
        
+
         clock.restart();
        
         sf::Event evnt;
@@ -69,16 +90,29 @@ void Game::ConfigureGame(sf::RenderWindow &window)
 
         if (platform.GetColider().checkColision(player.GetCollider(), direction, 1.f))
         {
-
-            if (counterSounds % 7450 == 0) {
-                playEffectSound.playZAWARDO();
-            }
-
-            counterSounds++;
             player.Collision(direction);
         }
+
+        if (platform1.GetColider().checkColision(player.GetCollider(), direction, 1.f))
+        {
+            player.Collision(direction);
+        }
+
+        if (platform2.GetColider().checkColision(player.GetCollider(), direction, 1.f))
+        {
+            player.Collision(direction);
+        }
+
+        view.move(10.2f, 5.0f);
+        const sf::Vector2f viewOffset(viewStart - view.getCenter());
+        sf::Vector2f spriteOffset;
+        spriteOffset.x = floor(viewOffset.x / Texture.getSize().x) * Texture.getSize().x;
+        spriteOffset.y = floor(viewOffset.y / Texture.getSize().y) * Texture.getSize().y;
+        Sprite.setPosition(spriteStart - spriteOffset);
        
         window.clear(sf::Color(10, 191, 255));
+        window.setView(view);
+        window.draw(Sprite);
 
         view.setCenter(player.GetPosition().x + 250.f, player.GetPosition().y);
         window.setView(view);
@@ -93,17 +127,14 @@ void Game::ConfigureGame(sf::RenderWindow &window)
         obstacle1.Draw(window);
         enemy1.Draw(window);
 
-        bool flag = lives->DrawLives(window);
-
-        if (flag == false) {
-            playEffectSound.StopFundalSong();
-            CloseWindow cr(window.getSize().x, window.getSize().y);
-            cr.setup(window);
-        }
+        lives->DrawLives(window);
 
         fire1.Draw(window);
 
         platform.Draw(window);
+        platform2.Draw(window);
+        platform1.Draw(window);
+
         window.display();
         score.IncreaseScore(player, obstacle1, enemy1);
     }

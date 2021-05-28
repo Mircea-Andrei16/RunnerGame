@@ -6,9 +6,9 @@ public:
 	CloseWindow(float witdh, float height);
 	~CloseWindow();
 	void draw(sf::RenderWindow& window);
-	void setup(sf::RenderWindow& window);
+	void setup();
 private:
-	sf::Text CloseText;
+	sf::Text CreditText[3];
 	sf::Font font;
 };
 

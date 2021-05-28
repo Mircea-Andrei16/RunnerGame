@@ -17,5 +17,5 @@ public:
 private:
 	int selectedItemIndex;
 	sf::Font font;
-	sf::Text menu[3];
+	sf::Text menu[4];
 };

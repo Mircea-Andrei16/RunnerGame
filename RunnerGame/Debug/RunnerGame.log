@@ -1,13 +1,2 @@
-﻿  Game.cpp
-E:\RunnerGame\RunnerGame\Game.cpp(10,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-E:\RunnerGame\RunnerGame\Game.cpp(100,64): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=unsigned int
-          ]
-E:\RunnerGame\RunnerGame\Game.cpp(100,44): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=unsigned int
-          ]
+﻿  CloseWindow.cpp
   RunnerGame.vcxproj -> E:\RunnerGame\RunnerGame\Debug\RunnerGame.exe

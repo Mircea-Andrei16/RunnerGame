@@ -15,5 +15,5 @@
 class Game
 {
 public:
-	void ConfigureGame(sf::RenderWindow &window);
+	void ConfigureGame(sf::RenderWindow &window,int val);
 };
